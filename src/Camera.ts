@@ -29,10 +29,6 @@ export class Camera {
     return this;
   }
 
-  move(dx: number, dy: number) {
-    return this.setPosition(this.x + dx, this.y + dy);
-  }
-
   setTarget(target: GameObject | null) {
     this.target = target;
 
