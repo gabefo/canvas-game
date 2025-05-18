@@ -12,6 +12,14 @@ export abstract class GameObject {
     this.height = height;
   }
 
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+
+  get centerY() {
+    return this.y + this.height / 2;
+  }
+
   addTo(world: World) {
     if (this.world === null) {
       world.objects.push(this);
@@ -56,7 +64,7 @@ export abstract class GameObject {
     this.y = y;
 
     if (this.world !== null && this.world.game.camera.target === this) {
-      this.world.game.camera.setPosition(x, y);
+      this.world.game.camera.setPosition(this.centerX, this.centerY);
     }
 
     return this;

@@ -16,13 +16,13 @@ export class Camera {
   setPosition(x: number, y: number) {
     const { world } = this.game;
 
-    const screenHalfWidth = window.innerWidth / 2;
-    const screenHalfHeight = window.innerHeight / 2;
+    const viewWidth = window.innerWidth / this.zoom;
+    const viewHeight = window.innerHeight / this.zoom;
 
-    const minX = screenHalfWidth;
-    const maxX = world.width - screenHalfWidth;
-    const minY = screenHalfHeight;
-    const maxY = world.height - screenHalfHeight;
+    const minX = viewWidth / 2;
+    const maxX = world.width - minX;
+    const minY = viewHeight / 2;
+    const maxY = world.height - minY;
 
     this.x = Math.min(Math.max(x, minX), maxX);
     this.y = Math.min(Math.max(y, minY), maxY);
@@ -37,7 +37,7 @@ export class Camera {
     this.target = target;
 
     if (target !== null) {
-      this.setPosition(target.x, target.y);
+      this.setPosition(target.centerX, target.centerY);
     }
 
     return this;

@@ -7,7 +7,10 @@ export class Player extends GameObject {
     super(40, 40);
   }
 
-  move(dx: number, dy: number) {
+  move(distance: number, angle: number) {
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+
     return this.setPosition(this.x + dx, this.y + dy);
   }
 
@@ -33,27 +36,27 @@ export class Player extends GameObject {
 
     const { controller } = world.game;
 
-    const delta = dt * speed;
-
-    let dx = 0,
-      dy = 0;
+    let vx = 0;
+    let vy = 0;
 
     if (controller.isKeyPressed("ArrowRight") || controller.isKeyPressed("d")) {
-      dx += delta;
+      vx++;
     }
 
     if (controller.isKeyPressed("ArrowLeft") || controller.isKeyPressed("a")) {
-      dx -= delta;
+      vx--;
     }
 
     if (controller.isKeyPressed("ArrowDown") || controller.isKeyPressed("s")) {
-      dy += delta;
+      vy++;
     }
 
     if (controller.isKeyPressed("ArrowUp") || controller.isKeyPressed("w")) {
-      dy -= delta;
+      vy--;
     }
 
-    this.move(dx, dy);
+    if (vx !== 0 || vy !== 0) {
+      this.move(dt * speed, Math.atan2(vy, vx));
+    }
   }
 }
