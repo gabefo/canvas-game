@@ -65,6 +65,7 @@ export class Renderer {
 
     ctx.fillStyle = "#00ff00";
     ctx.font = "12px Arial";
+    ctx.textBaseline = "top";
     ctx.fillText(`${currentFps} FPS`, 20, 20);
 
     ctx.restore();
