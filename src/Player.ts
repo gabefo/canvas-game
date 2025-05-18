@@ -8,10 +8,31 @@ export class Player extends GameObject {
   }
 
   move(distance: number, angle: number) {
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
+    let x = this.x + Math.cos(angle) * distance;
+    let y = this.y + Math.sin(angle) * distance;
 
-    return this.setPosition(this.x + dx, this.y + dy);
+    const { world } = this;
+
+    if (world !== null) {
+      const minX = 0;
+      const maxX = world.width - this.width;
+      const minY = 0;
+      const maxY = world.height - this.height;
+
+      if (x < minX) {
+        x = minX;
+      } else if (x > maxX) {
+        x = maxX;
+      }
+
+      if (y < minY) {
+        y = minY;
+      } else if (y > maxY) {
+        y = maxY;
+      }
+    }
+
+    return this.setPosition(x, y);
   }
 
   render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {

@@ -26,6 +26,7 @@ export class Camera {
 
     this.x = Math.min(Math.max(x, minX), maxX);
     this.y = Math.min(Math.max(y, minY), maxY);
+
     return this;
   }
 

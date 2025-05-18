@@ -20,6 +20,17 @@ export abstract class GameObject {
     return this.y + this.height / 2;
   }
 
+  setPosition(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+
+    if (this.world !== null && this.world.game.camera.target === this) {
+      this.world.game.camera.setPosition(this.centerX, this.centerY);
+    }
+
+    return this;
+  }
+
   addTo(world: World) {
     if (this.world === null) {
       world.objects.push(this);
@@ -33,38 +44,6 @@ export abstract class GameObject {
     if (this.world !== null) {
       this.world.objects.filter((obj) => obj !== this);
       this.world = null;
-    }
-
-    return this;
-  }
-
-  setPosition(x: number, y: number) {
-    const { world } = this;
-
-    if (world !== null) {
-      const minX = 0;
-      const maxX = world.width - this.width;
-      const minY = 0;
-      const maxY = world.height - this.height;
-
-      if (x < minX) {
-        x = minX;
-      } else if (x > maxX) {
-        x = maxX;
-      }
-
-      if (y < minY) {
-        y = minY;
-      } else if (y > maxY) {
-        y = maxY;
-      }
-    }
-
-    this.x = x;
-    this.y = y;
-
-    if (this.world !== null && this.world.game.camera.target === this) {
-      this.world.game.camera.setPosition(this.centerX, this.centerY);
     }
 
     return this;
