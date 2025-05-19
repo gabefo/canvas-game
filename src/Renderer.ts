@@ -40,19 +40,17 @@ export class Renderer {
 
     if (!ctx) return;
 
-    const { canvas } = this;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     ctx.save();
+
+    const { canvas } = this;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const dpi = window.devicePixelRatio;
     ctx.scale(dpi, dpi);
 
-    const { camera, world } = this.game;
-
     ctx.save();
 
+    const { camera, world } = this.game;
     const cx = canvas.width / 2 / dpi;
     const cy = canvas.height / 2 / dpi;
     ctx.translate(cx, cy);
