@@ -50,7 +50,7 @@ export class Renderer {
     const { camera } = this.game;
     const canvasWidth = canvas.width / dpi;
     const canvasHeight = canvas.height / dpi;
-    ctx.translate(canvasWidth / 2, canvasHeight / 2);
+    ctx.translate(canvasWidth * 0.5, canvasHeight * 0.8);
     ctx.scale(camera.zoom, camera.zoom);
     ctx.rotate(-camera.rotationX);
     ctx.translate(-camera.x, -camera.y);
