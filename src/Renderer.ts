@@ -40,22 +40,22 @@ export class Renderer {
 
     if (!ctx) return;
 
-    const { canvas, game, currentFps } = this;
+    const { canvas } = this;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
 
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
     const dpi = window.devicePixelRatio;
     ctx.scale(dpi, dpi);
 
-    const { camera, world } = game;
+    const { camera, world } = this.game;
 
     ctx.save();
-    ctx.translate(cx / dpi, cy / dpi);
 
+    const cx = canvas.width / 2 / dpi;
+    const cy = canvas.height / 2 / dpi;
+    ctx.translate(cx, cy);
     ctx.scale(camera.zoom, camera.zoom);
     ctx.translate(-camera.x, -camera.y);
 
@@ -66,7 +66,7 @@ export class Renderer {
     ctx.fillStyle = "#00ff00";
     ctx.font = "12px Arial";
     ctx.textBaseline = "top";
-    ctx.fillText(`${currentFps} FPS`, 20, 20);
+    ctx.fillText(`${this.currentFps} FPS`, 20, 20);
 
     ctx.restore();
   }
