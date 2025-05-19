@@ -4,11 +4,11 @@ export class Player extends GameObject {
   speed: number = 0.5;
 
   constructor() {
-    super(40, 40);
+    super(40, 40, 40);
   }
 
   move(distance: number, angle: number) {
-    const a = angle + this.rotation;
+    const a = angle + this.rotationX;
     let x = this.x + Math.cos(a) * distance;
     let y = this.y + Math.sin(a) * distance;
 
@@ -33,11 +33,11 @@ export class Player extends GameObject {
       }
     }
 
-    return this.setPosition(x, y);
+    return this.setPosition(x, y, this.z);
   }
 
   rotate(delta: number) {
-    this.rotation += delta;
+    this.setRotation(this.rotationX + delta, this.rotationY, this.rotationZ);
     return this;
   }
 
@@ -46,7 +46,7 @@ export class Player extends GameObject {
 
     if (!world) return;
 
-    const { x, y, width, height, rotation } = this;
+    const { x, y, width, height, rotationX: rotation } = this;
 
     ctx.save();
     ctx.translate(x, y);

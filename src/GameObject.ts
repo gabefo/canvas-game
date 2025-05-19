@@ -1,28 +1,17 @@
+import { Transform } from "./Transform";
 import type { World } from "./World";
 
-export abstract class GameObject {
-  x: number = 0;
-  y: number = 0;
+export abstract class GameObject extends Transform {
   width: number;
   height: number;
-  rotation: number = 0;
+  depth: number;
   world: World | null = null;
 
-  constructor(width: number, height: number) {
+  constructor(width: number, height: number, depth: number) {
+    super();
     this.width = width;
     this.height = height;
-  }
-
-  setPosition(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-
-    return this;
-  }
-
-  setRotation(rotation: number) {
-    this.rotation = rotation;
-    return this;
+    this.depth = depth;
   }
 
   addTo(world: World) {

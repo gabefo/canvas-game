@@ -34,7 +34,7 @@ export class World {
   constructor(game: Game) {
     this.game = game;
     this.player = new Player()
-      .setPosition(this.width / 2, this.height / 2)
+      .setPosition(this.width / 2, this.height / 2, 0)
       .addTo(this);
   }
 

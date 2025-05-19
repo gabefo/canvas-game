@@ -1,28 +1,16 @@
 import type { Game } from "./Game";
 import type { GameObject } from "./GameObject";
+import { Transform } from "./Transform";
 
-export class Camera {
+export class Camera extends Transform {
   readonly game: Game;
 
-  x: number = 0;
-  y: number = 0;
-  rotation: number = 0;
   zoom: number = 1;
   target: GameObject | null = null;
 
   constructor(game: Game) {
+    super();
     this.game = game;
-  }
-
-  setPosition(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-    return this;
-  }
-
-  setRotation(rotation: number) {
-    this.rotation = rotation;
-    return this;
   }
 
   setZoom(zoom: number) {
@@ -40,8 +28,8 @@ export class Camera {
     const { target } = this;
 
     if (target) {
-      this.setPosition(target.x, target.y);
-      this.setRotation(target.rotation);
+      this.setPosition(target.x, target.y, target.z);
+      this.setRotation(target.rotationX, target.rotationY, target.rotationZ);
     }
   }
 }
