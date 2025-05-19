@@ -24,7 +24,7 @@ export abstract class GameObject {
     this.x = x;
     this.y = y;
 
-    if (this.world !== null && this.world.game.camera.target === this) {
+    if (this.world && this.world.game.camera.target === this) {
       this.world.game.camera.setPosition(this.centerX, this.centerY);
     }
 
@@ -32,7 +32,7 @@ export abstract class GameObject {
   }
 
   addTo(world: World) {
-    if (this.world === null) {
+    if (!this.world) {
       world.objects.push(this);
       this.world = world;
     }
@@ -41,7 +41,7 @@ export abstract class GameObject {
   }
 
   remove() {
-    if (this.world !== null) {
+    if (this.world) {
       this.world.objects.filter((obj) => obj !== this);
       this.world = null;
     }

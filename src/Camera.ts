@@ -30,10 +30,31 @@ export class Camera {
     return this;
   }
 
+  setZoom(zoom: number) {
+    this.zoom = zoom;
+
+    let x: number;
+    let y: number;
+
+    const { target } = this;
+
+    if (target) {
+      x = target.centerX;
+      y = target.centerY;
+    } else {
+      x = this.x;
+      y = this.y;
+    }
+
+    this.setPosition(x, y);
+
+    return this;
+  }
+
   setTarget(target: GameObject | null) {
     this.target = target;
 
-    if (target !== null) {
+    if (target) {
       this.setPosition(target.centerX, target.centerY);
     }
 

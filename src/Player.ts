@@ -13,7 +13,7 @@ export class Player extends GameObject {
 
     const { world } = this;
 
-    if (world !== null) {
+    if (world) {
       const minX = 0;
       const maxX = world.width - this.width;
       const minY = 0;
