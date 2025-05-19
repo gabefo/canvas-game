@@ -38,11 +38,11 @@ export class World {
       .addTo(this);
   }
 
-  update(dt: number) {
+  update(deltaTime: number) {
     const { objects } = this;
 
     for (let i = 0; i < objects.length; i++) {
-      objects[i].update(dt);
+      objects[i].update(deltaTime);
     }
   }
 

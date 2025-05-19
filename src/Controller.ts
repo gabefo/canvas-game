@@ -29,7 +29,11 @@ export class Controller {
     return this.pressedKeys.has(key);
   }
 
-  private onMouseMove(e: MouseEvent) {}
+  private onMouseMove(e: MouseEvent) {
+    const sensitivity = 0.002;
+    const deltaX = e.movementX;
+    this.game.world.player.rotate(deltaX * sensitivity);
+  }
 
   private onMouseDown(e: MouseEvent) {
     e.preventDefault();
@@ -46,12 +50,14 @@ export class Controller {
   private onWheel(e: WheelEvent) {}
 
   private onKeyDown(e: KeyboardEvent) {
+    if (e.code === "Escape") return;
     e.preventDefault();
     if (this.pressedKeys.has(e.code)) return;
     this.pressedKeys.add(e.code);
   }
 
   private onKeyUp(e: KeyboardEvent) {
+    if (e.code === "Escape") return;
     e.preventDefault();
     this.pressedKeys.delete(e.code);
   }

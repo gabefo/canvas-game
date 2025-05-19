@@ -15,5 +15,5 @@ export class Vehicle extends GameObject {
 
   render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {}
 
-  update(dt: number) {}
+  update(deltaTime: number) {}
 }

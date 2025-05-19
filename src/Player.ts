@@ -8,16 +8,17 @@ export class Player extends GameObject {
   }
 
   move(distance: number, angle: number) {
-    let x = this.x + Math.cos(angle) * distance;
-    let y = this.y + Math.sin(angle) * distance;
+    const a = angle + this.rotation;
+    let x = this.x + Math.cos(a) * distance;
+    let y = this.y + Math.sin(a) * distance;
 
     const { world } = this;
 
     if (world) {
-      const minX = 0;
-      const maxX = world.width - this.width;
-      const minY = 0;
-      const maxY = world.height - this.height;
+      const minX = this.width / 2;
+      const maxX = world.width - this.width / 2;
+      const minY = this.height / 2;
+      const maxY = world.height - this.height / 2;
 
       if (x < minX) {
         x = minX;
@@ -35,20 +36,29 @@ export class Player extends GameObject {
     return this.setPosition(x, y);
   }
 
+  rotate(delta: number) {
+    this.rotation += delta;
+    return this;
+  }
+
   render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
     const { world } = this;
 
     if (!world) return;
 
+    const { x, y, width, height, rotation } = this;
+
     ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
     ctx.fillStyle = "#ff0000";
     ctx.beginPath();
-    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.rect(-width / 2, -height / 2, width, height);
     ctx.fill();
     ctx.restore();
   }
 
-  update(dt: number) {
+  update(deltaTime: number) {
     const { world } = this;
 
     if (!world) return;
@@ -85,7 +95,7 @@ export class Player extends GameObject {
 
     if (vx !== 0 || vy !== 0) {
       const multiplier = controller.isKeyPressed("ShiftLeft") ? 1.5 : 1;
-      this.move(dt * this.speed * multiplier, Math.atan2(vy, vx));
+      this.move(deltaTime * this.speed * multiplier, Math.atan2(vy, vx));
     }
   }
 }

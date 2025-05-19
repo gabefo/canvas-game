@@ -1,5 +1,6 @@
 export abstract class Gun {
   readonly name: string;
+  readonly caliber: string;
   readonly damage: number;
   readonly fireRate: number;
   readonly reloadTime: number;
@@ -13,12 +14,14 @@ export abstract class Gun {
   constructor({
     name,
     damage,
+    caliber,
     fireRate,
     reloadTime,
     maxAmmo,
     ammo,
   }: {
     name: string;
+    caliber: string;
     damage: number;
     fireRate: number;
     reloadTime: number;
@@ -26,6 +29,7 @@ export abstract class Gun {
     ammo: number;
   }) {
     this.name = name;
+    this.caliber = caliber;
     this.damage = damage;
     this.fireRate = fireRate;
     this.reloadTime = reloadTime;

@@ -5,6 +5,7 @@ export abstract class GameObject {
   y: number = 0;
   width: number;
   height: number;
+  rotation: number = 0;
   world: World | null = null;
 
   constructor(width: number, height: number) {
@@ -12,22 +13,15 @@ export abstract class GameObject {
     this.height = height;
   }
 
-  get centerX() {
-    return this.x + this.width / 2;
-  }
-
-  get centerY() {
-    return this.y + this.height / 2;
-  }
-
   setPosition(x: number, y: number) {
     this.x = x;
     this.y = y;
 
-    if (this.world && this.world.game.camera.target === this) {
-      this.world.game.camera.setPosition(this.centerX, this.centerY);
-    }
+    return this;
+  }
 
+  setRotation(rotation: number) {
+    this.rotation = rotation;
     return this;
   }
 
@@ -49,7 +43,7 @@ export abstract class GameObject {
     return this;
   }
 
-  abstract update(dt: number): void;
+  abstract update(deltaTime: number): void;
 
   abstract render(
     ctx: CanvasRenderingContext2D,

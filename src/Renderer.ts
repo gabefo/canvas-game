@@ -5,13 +5,6 @@ export class Renderer {
 
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null;
-  private frameRequestId: number;
-  private lastUpdate: number | undefined;
-  private timeSinceFirstFrame: number = 0;
-  private frameCount: number = 0;
-
-  fps: number = Infinity;
-  currentFps: number = 0;
 
   constructor(game: Game, canvas: HTMLCanvasElement) {
     this.game = game;
@@ -20,8 +13,12 @@ export class Renderer {
 
     this.resize();
 
-    this.update = this.update.bind(this);
-    this.frameRequestId = requestAnimationFrame(this.update);
+    this.onResize = this.onResize.bind(this);
+    window.addEventListener("resize", this.onResize);
+
+    canvas.addEventListener("click", () => {
+      canvas.requestPointerLock();
+    });
   }
 
   resize() {
@@ -50,64 +47,31 @@ export class Renderer {
 
     ctx.save();
 
-    const { camera, world } = this.game;
+    const { camera } = this.game;
     const cx = canvas.width / 2 / dpi;
     const cy = canvas.height / 2 / dpi;
     ctx.translate(cx, cy);
     ctx.scale(camera.zoom, camera.zoom);
+    ctx.rotate(-camera.rotation);
     ctx.translate(-camera.x, -camera.y);
 
-    world.render(ctx, canvas);
+    this.game.world.render(ctx, canvas);
 
     ctx.restore();
 
     ctx.fillStyle = "#00ff00";
     ctx.font = "12px Arial";
     ctx.textBaseline = "top";
-    ctx.fillText(`${this.currentFps} FPS`, 20, 20);
+    ctx.fillText(`${this.game.ticker.currentFps} FPS`, 20, 20);
 
     ctx.restore();
   }
 
-  update(t: number) {
-    const { lastUpdate } = this;
-
-    let elapsed: number;
-    let skip = false;
-
-    if (lastUpdate === undefined) {
-      elapsed = 0;
-    } else {
-      elapsed = t - lastUpdate;
-
-      if (elapsed < 1000 / this.fps) {
-        skip = true;
-      }
-    }
-
-    if (!skip) {
-      this.frameCount++;
-      this.timeSinceFirstFrame += elapsed;
-
-      if (this.timeSinceFirstFrame >= 1000) {
-        this.currentFps = Math.ceil(
-          (this.frameCount * 1000) / this.timeSinceFirstFrame
-        );
-        this.frameCount = 0;
-        this.timeSinceFirstFrame = 0;
-      }
-
-      this.game.world.update(elapsed);
-
-      this.render();
-
-      this.lastUpdate = t;
-    }
-
-    this.frameRequestId = requestAnimationFrame(this.update);
+  onResize() {
+    this.resize();
   }
 
   destroy() {
-    cancelAnimationFrame(this.frameRequestId);
+    window.removeEventListener("resize", this.onResize);
   }
 }
