@@ -53,31 +53,39 @@ export class Player extends GameObject {
 
     if (!world) return;
 
-    const { speed } = this;
-
     const { controller } = world.game;
 
     let vx = 0;
     let vy = 0;
 
-    if (controller.isKeyPressed("ArrowRight") || controller.isKeyPressed("d")) {
+    if (
+      controller.isKeyPressed("ArrowRight") ||
+      controller.isKeyPressed("KeyD")
+    ) {
       vx++;
     }
 
-    if (controller.isKeyPressed("ArrowLeft") || controller.isKeyPressed("a")) {
+    if (
+      controller.isKeyPressed("ArrowLeft") ||
+      controller.isKeyPressed("KeyA")
+    ) {
       vx--;
     }
 
-    if (controller.isKeyPressed("ArrowDown") || controller.isKeyPressed("s")) {
+    if (
+      controller.isKeyPressed("ArrowDown") ||
+      controller.isKeyPressed("KeyS")
+    ) {
       vy++;
     }
 
-    if (controller.isKeyPressed("ArrowUp") || controller.isKeyPressed("w")) {
+    if (controller.isKeyPressed("ArrowUp") || controller.isKeyPressed("KeyW")) {
       vy--;
     }
 
     if (vx !== 0 || vy !== 0) {
-      this.move(dt * speed, Math.atan2(vy, vx));
+      const multiplier = controller.isKeyPressed("ShiftLeft") ? 1.5 : 1;
+      this.move(dt * this.speed * multiplier, Math.atan2(vy, vx));
     }
   }
 }

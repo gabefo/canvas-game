@@ -47,13 +47,13 @@ export class Controller {
 
   private onKeyDown(e: KeyboardEvent) {
     e.preventDefault();
-    if (this.pressedKeys.has(e.key)) return;
-    this.pressedKeys.add(e.key);
+    if (this.pressedKeys.has(e.code)) return;
+    this.pressedKeys.add(e.code);
   }
 
   private onKeyUp(e: KeyboardEvent) {
     e.preventDefault();
-    this.pressedKeys.delete(e.key);
+    this.pressedKeys.delete(e.code);
   }
 
   disconnect() {
