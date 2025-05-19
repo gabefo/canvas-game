@@ -51,9 +51,13 @@ export class Player extends GameObject {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rotation);
-    ctx.fillStyle = "#ff0000";
+    ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.rect(-width / 2, -height / 2, width, height);
+    ctx.moveTo(-width / 2, height / 2);
+    ctx.lineTo(0, -height / 2);
+    ctx.lineTo(width / 2, height / 2);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
     ctx.fill();
     ctx.restore();
   }

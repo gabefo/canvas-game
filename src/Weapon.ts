@@ -1,4 +1,4 @@
-export abstract class Gun {
+export abstract class Weapon {
   readonly name: string;
   readonly caliber: string;
   readonly damage: number;
@@ -45,7 +45,7 @@ export abstract class Gun {
     const { lastShotTime, fireRate } = this;
     const now = Date.now();
 
-    if (lastShotTime !== undefined && now - lastShotTime >= 1000 / fireRate) {
+    if (lastShotTime !== undefined && now - lastShotTime < 1000 / fireRate) {
       return false;
     }
 
