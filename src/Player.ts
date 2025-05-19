@@ -56,7 +56,7 @@ export class Player extends GameObject {
     ctx.moveTo(-width / 2, height / 2);
     ctx.lineTo(0, -height / 2);
     ctx.lineTo(width / 2, height / 2);
-    ctx.lineTo(0, 0);
+    ctx.lineTo(0, height / 4);
     ctx.closePath();
     ctx.fill();
     ctx.restore();
