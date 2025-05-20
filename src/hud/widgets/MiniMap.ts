@@ -1,6 +1,6 @@
 import { HUDWidget } from "./HUDWidget";
 
-export class MiniMap extends HUDWidget {
+export class Minimap extends HUDWidget {
   update(deltaTime: number): void {}
 
   render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
