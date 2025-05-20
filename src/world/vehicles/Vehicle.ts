@@ -1,7 +1,7 @@
 import type { Player } from "@player/Player";
 import { GameObject } from "../GameObject";
 
-export class Vehicle extends GameObject {
+export abstract class Vehicle extends GameObject {
   name: string;
   seats: (Player | null)[];
   fuel: number = 80;
@@ -12,8 +12,4 @@ export class Vehicle extends GameObject {
     this.name = name;
     this.seats = Array(seats).fill(null);
   }
-
-  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {}
-
-  update(deltaTime: number) {}
 }

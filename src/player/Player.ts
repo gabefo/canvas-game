@@ -41,27 +41,6 @@ export class Player extends GameObject {
     return this;
   }
 
-  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    const { world } = this;
-
-    if (!world) return;
-
-    const { x, y, width, height, rotationX: rotation } = this;
-
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rotation);
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.moveTo(-width / 2, height / 2);
-    ctx.lineTo(0, -height / 2);
-    ctx.lineTo(width / 2, height / 2);
-    ctx.lineTo(0, height / 4);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
   update(deltaTime: number) {
     const { world } = this;
 
@@ -92,5 +71,26 @@ export class Player extends GameObject {
       const multiplier = controller.isKeyDown("ShiftLeft") ? 1.5 : 1;
       this.move(deltaTime * this.speed * multiplier, Math.atan2(vy, vx));
     }
+  }
+
+  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+    const { world } = this;
+
+    if (!world) return;
+
+    const { x, y, width, height, rotationX: rotation } = this;
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.moveTo(-width / 2, height / 2);
+    ctx.lineTo(0, -height / 2);
+    ctx.lineTo(width / 2, height / 2);
+    ctx.lineTo(0, height / 4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
   }
 }

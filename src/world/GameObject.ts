@@ -1,5 +1,5 @@
-import type { World } from "@world";
 import { Transform } from "./Transform";
+import type { World } from "./World";
 
 export abstract class GameObject extends Transform {
   width: number;
