@@ -1,4 +1,4 @@
-import { GameObject } from "./GameObject";
+import { GameObject } from "../world/GameObject";
 
 export class Player extends GameObject {
   speed: number = 0.5;
@@ -67,38 +67,29 @@ export class Player extends GameObject {
 
     if (!world) return;
 
-    const { controller } = world.game;
+    const { input: controller } = world.game;
 
     let vx = 0;
     let vy = 0;
 
-    if (
-      controller.isKeyPressed("ArrowRight") ||
-      controller.isKeyPressed("KeyD")
-    ) {
+    if (controller.isKeyDown("ArrowRight") || controller.isKeyDown("KeyD")) {
       vx++;
     }
 
-    if (
-      controller.isKeyPressed("ArrowLeft") ||
-      controller.isKeyPressed("KeyA")
-    ) {
+    if (controller.isKeyDown("ArrowLeft") || controller.isKeyDown("KeyA")) {
       vx--;
     }
 
-    if (
-      controller.isKeyPressed("ArrowDown") ||
-      controller.isKeyPressed("KeyS")
-    ) {
+    if (controller.isKeyDown("ArrowDown") || controller.isKeyDown("KeyS")) {
       vy++;
     }
 
-    if (controller.isKeyPressed("ArrowUp") || controller.isKeyPressed("KeyW")) {
+    if (controller.isKeyDown("ArrowUp") || controller.isKeyDown("KeyW")) {
       vy--;
     }
 
     if (vx !== 0 || vy !== 0) {
-      const multiplier = controller.isKeyPressed("ShiftLeft") ? 1.5 : 1;
+      const multiplier = controller.isKeyDown("ShiftLeft") ? 1.5 : 1;
       this.move(deltaTime * this.speed * multiplier, Math.atan2(vy, vx));
     }
   }

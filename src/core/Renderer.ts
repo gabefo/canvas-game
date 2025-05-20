@@ -59,10 +59,7 @@ export class Renderer {
 
     ctx.restore();
 
-    ctx.fillStyle = "#00ff00";
-    ctx.font = "12px Arial";
-    ctx.textBaseline = "top";
-    ctx.fillText(`${this.game.ticker.currentFps} FPS`, 20, 20);
+    this.game.hud.render(ctx, canvas);
 
     ctx.restore();
   }

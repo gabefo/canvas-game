@@ -1,20 +1,23 @@
-import { Camera } from "./Camera";
-import { Controller } from "./Controller";
+import { HUDManager } from "../hud/HUDManager";
+import { Camera } from "../world/Camera";
+import { World } from "../world/World";
+import { InputManager } from "./InputManager";
 import { Renderer } from "./Renderer";
 import { Ticker } from "./Ticker";
-import { World } from "./World";
 
 export class Game {
-  readonly camera: Camera;
   readonly world: World;
-  readonly controller: Controller;
+  readonly camera: Camera;
+  readonly hud: HUDManager;
+  readonly input: InputManager;
   readonly renderer: Renderer;
   readonly ticker: Ticker;
 
   constructor(canvas: HTMLCanvasElement) {
     this.world = new World(this);
     this.camera = new Camera(this).setTarget(this.world.player);
-    this.controller = new Controller(this);
+    this.hud = new HUDManager(this);
+    this.input = new InputManager(this);
     this.renderer = new Renderer(this, canvas);
     this.ticker = new Ticker(this);
   }
@@ -22,10 +25,7 @@ export class Game {
   update(deltaTime: number) {
     this.world.update(deltaTime);
     this.camera.update(deltaTime);
+    this.hud.update(deltaTime);
     this.renderer.render();
   }
-}
-
-export function createGame(canvas: HTMLCanvasElement) {
-  return new Game(canvas);
 }

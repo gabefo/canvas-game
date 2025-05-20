@@ -1,9 +1,9 @@
 import type { Game } from "./Game";
 
-export class Controller {
+export class InputManager {
   readonly game: Game;
 
-  private pressedKeys = new Set<string>();
+  private keysDown = new Set<string>();
 
   constructor(game: Game) {
     this.game = game;
@@ -25,8 +25,8 @@ export class Controller {
     window.addEventListener("keyup", this.onKeyUp);
   }
 
-  isKeyPressed(key: string) {
-    return this.pressedKeys.has(key);
+  isKeyDown(key: string) {
+    return this.keysDown.has(key);
   }
 
   private onMouseMove(e: MouseEvent) {
@@ -52,14 +52,13 @@ export class Controller {
   private onKeyDown(e: KeyboardEvent) {
     if (e.code === "Escape") return;
     e.preventDefault();
-    if (this.pressedKeys.has(e.code)) return;
-    this.pressedKeys.add(e.code);
+    this.keysDown.add(e.code);
   }
 
   private onKeyUp(e: KeyboardEvent) {
     if (e.code === "Escape") return;
     e.preventDefault();
-    this.pressedKeys.delete(e.code);
+    this.keysDown.delete(e.code);
   }
 
   disconnect() {

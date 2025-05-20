@@ -1,5 +1,5 @@
-import { GameObject } from "./GameObject";
-import type { Player } from "./Player";
+import type { Player } from "../../player/Player";
+import { GameObject } from "../GameObject";
 
 export class Vehicle extends GameObject {
   name: string;

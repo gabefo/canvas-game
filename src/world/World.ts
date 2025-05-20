@@ -1,6 +1,6 @@
-import type { Game } from "./Game";
+import type { Game } from "../core/Game";
+import { Player } from "../player/Player";
 import type { GameObject } from "./GameObject";
-import { Player } from "./Player";
 
 function createPattern(ctx: CanvasRenderingContext2D) {
   const squareSize = 40;
@@ -39,15 +39,13 @@ export class World {
   }
 
   update(deltaTime: number) {
-    const { objects } = this;
-
-    for (let i = 0; i < objects.length; i++) {
-      objects[i].update(deltaTime);
+    for (const object of this.objects) {
+      object.update(deltaTime);
     }
   }
 
   render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    const { width, height, objects } = this;
+    const { width, height } = this;
 
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, width, height);
@@ -59,8 +57,8 @@ export class World {
     ctx.fillStyle = this.pattern;
     ctx.fillRect(0, 0, width, height);
 
-    for (let i = 0; i < objects.length; i++) {
-      objects[i].render(ctx, canvas);
+    for (const object of this.objects) {
+      object.render(ctx, canvas);
     }
   }
 }
