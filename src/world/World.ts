@@ -1,5 +1,5 @@
-import type { Game } from "../core/Game";
-import { Player } from "../player/Player";
+import type { Game } from "@core/Game";
+import { Player } from "@player/Player";
 import type { GameObject } from "./GameObject";
 
 function createPattern(ctx: CanvasRenderingContext2D) {

@@ -1,4 +1,4 @@
-import type { Player } from "../../player/Player";
+import type { Player } from "@player/Player";
 import { GameObject } from "../GameObject";
 
 export class Vehicle extends GameObject {

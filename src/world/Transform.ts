@@ -1,4 +1,4 @@
-import { normalizeAngle } from "../core/utils";
+import { normalizeAngle } from "@core/utils";
 
 export class Transform {
   x: number;

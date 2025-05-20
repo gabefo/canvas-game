@@ -1,6 +1,6 @@
-import { HUDManager } from "../hud/HUDManager";
-import { Camera } from "../world/Camera";
-import { World } from "../world/World";
+import { HUDManager } from "@hud/HUDManager";
+import { Camera } from "@world/Camera";
+import { World } from "@world/World";
 import { InputManager } from "./InputManager";
 import { Renderer } from "./Renderer";
 import { Ticker } from "./Ticker";

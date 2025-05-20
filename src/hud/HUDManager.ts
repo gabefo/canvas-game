@@ -1,5 +1,5 @@
-import type { Game } from "../core/Game";
-import type { HUDWidget } from "./HUDWidget";
+import type { Game } from "@core/Game";
+import type { HUDWidget } from "./widgets/HUDWidget";
 
 export class HUDManager {
   readonly game: Game;

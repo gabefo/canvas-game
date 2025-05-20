@@ -1,4 +1,4 @@
-import { Game } from "./core/Game";
+import { Game } from "@core/Game";
 
 function createGame(canvas: HTMLCanvasElement) {
   return new Game(canvas);

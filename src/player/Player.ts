@@ -1,4 +1,4 @@
-import { GameObject } from "../world/GameObject";
+import { GameObject } from "@world/GameObject";
 
 export class Player extends GameObject {
   speed: number = 0.5;
