@@ -57,19 +57,34 @@ export class Player extends GameObject {
 
     if (!world) return;
 
-    const { input: controller } = world.game;
+    const { inputs } = world.game;
 
     let vx = 0;
     let vy = 0;
 
-    if (controller.isKeyDown("ArrowRight") || controller.isKeyDown("KeyD"))
+    if (
+      inputs.keyboard.isKeyDown("ArrowRight") ||
+      inputs.keyboard.isKeyDown("KeyD")
+    )
       vx++;
-    if (controller.isKeyDown("ArrowLeft") || controller.isKeyDown("KeyA")) vx--;
-    if (controller.isKeyDown("ArrowDown") || controller.isKeyDown("KeyS")) vy++;
-    if (controller.isKeyDown("ArrowUp") || controller.isKeyDown("KeyW")) vy--;
+    if (
+      inputs.keyboard.isKeyDown("ArrowLeft") ||
+      inputs.keyboard.isKeyDown("KeyA")
+    )
+      vx--;
+    if (
+      inputs.keyboard.isKeyDown("ArrowDown") ||
+      inputs.keyboard.isKeyDown("KeyS")
+    )
+      vy++;
+    if (
+      inputs.keyboard.isKeyDown("ArrowUp") ||
+      inputs.keyboard.isKeyDown("KeyW")
+    )
+      vy--;
 
     if (vx !== 0 || vy !== 0) {
-      this.speed = controller.isKeyDown("ShiftLeft") ? 0.01 : 0.005;
+      this.speed = inputs.keyboard.isKeyDown("ShiftLeft") ? 0.01 : 0.005;
       this.walk(deltaTime * this.speed, Math.atan2(vy, vx));
     } else {
       this.speed = 0;
