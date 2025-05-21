@@ -1,17 +1,12 @@
+import type { mat4 } from "gl-matrix";
 import { Transform } from "./Transform";
 import type { World } from "./World";
 
 export abstract class GameObject extends Transform {
-  width: number;
-  height: number;
-  depth: number;
   world: World | null = null;
 
-  constructor(width: number, height: number, depth: number) {
+  constructor() {
     super();
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
   }
 
   addTo(world: World) {
@@ -35,7 +30,8 @@ export abstract class GameObject extends Transform {
   abstract update(deltaTime: number): void;
 
   abstract render(
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement
+    gl: WebGL2RenderingContext,
+    projection: mat4,
+    view: mat4
   ): void;
 }

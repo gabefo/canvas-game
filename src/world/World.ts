@@ -1,40 +1,27 @@
 import type { Game } from "@core/Game";
+import { PlaneGeometry } from "@core/geometry/PlaneGeometry";
 import { Player } from "@player/Player";
+import { mat4 } from "gl-matrix";
 import type { GameObject } from "./GameObject";
-
-function createPattern(ctx: CanvasRenderingContext2D) {
-  const squareSize = 40;
-
-  const patternCanvas = document.createElement("canvas");
-  patternCanvas.width = squareSize * 2;
-  patternCanvas.height = squareSize * 2;
-
-  const pctx = patternCanvas.getContext("2d")!;
-
-  pctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-  pctx.fillRect(0, 0, squareSize, squareSize);
-  pctx.fillRect(squareSize, squareSize, squareSize, squareSize);
-
-  pctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-  pctx.fillRect(squareSize, 0, squareSize, squareSize);
-  pctx.fillRect(0, squareSize, squareSize, squareSize);
-
-  return ctx.createPattern(patternCanvas, "repeat")!;
-}
 
 export class World {
   readonly game: Game;
-  readonly width: number = 20000;
-  readonly height: number = 20000;
+  readonly width: number = 20;
+  readonly height: number = 20;
+  readonly depth: number = 20;
+  readonly floor: PlaneGeometry;
   readonly player: Player;
   readonly objects: GameObject[] = [];
 
-  private pattern: CanvasPattern | null = null;
-
   constructor(game: Game) {
     this.game = game;
+
+    this.floor = new PlaneGeometry(this.width, this.depth)
+      .setColor(0.5, 0.5, 0.5, 1.0)
+      .setPosition(this.width / 2, 0, this.depth / 2);
+
     this.player = new Player()
-      .setPosition(this.width / 2, this.height / 2, 0)
+      .setPosition(this.width / 2, 0, this.depth / 2)
       .addTo(this);
   }
 
@@ -44,21 +31,11 @@ export class World {
     }
   }
 
-  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    const { width, height } = this;
+  render(gl: WebGL2RenderingContext, projection: mat4, view: mat4): void {
+    this.floor.render(gl, projection, view);
 
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, width, height);
-
-    if (!this.pattern) {
-      this.pattern = createPattern(ctx);
-    }
-
-    ctx.fillStyle = this.pattern;
-    ctx.fillRect(0, 0, width, height);
-
-    for (const object of this.objects) {
-      object.render(ctx, canvas);
+    for (const obj of this.objects) {
+      obj.render(gl, projection, view);
     }
   }
 }

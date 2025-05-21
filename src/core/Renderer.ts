@@ -1,72 +1,63 @@
-import type { Game } from "./Game";
+import { mat4 } from "gl-matrix";
+import { Game } from "./Game";
 
 export class Renderer {
   readonly game: Game;
+  readonly canvas: HTMLCanvasElement;
+  readonly gl: WebGL2RenderingContext;
 
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D | null;
+  private projectionMatrix: mat4 = mat4.create();
 
   constructor(game: Game, canvas: HTMLCanvasElement) {
     this.game = game;
     this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+
+    const gl = canvas.getContext("webgl2");
+    if (!gl) throw new Error("WebGL2 not supported");
+
+    this.gl = gl;
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.disable(gl.CULL_FACE);
 
     this.resize();
 
     this.onResize = this.onResize.bind(this);
-    window.addEventListener("resize", this.onResize);
 
-    canvas.addEventListener("click", () => {
+    window.addEventListener("resize", this.onResize);
+    window.addEventListener("click", () => {
       canvas.requestPointerLock();
     });
   }
 
-  resize() {
-    const { canvas } = this;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const dpi = window.devicePixelRatio;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    canvas.width = width * dpi;
-    canvas.height = height * dpi;
+  resize(): void {
+    const dpi = window.devicePixelRatio || 1;
+    this.canvas.width = window.innerWidth * dpi;
+    this.canvas.height = window.innerHeight * dpi;
+    this.canvas.style.width = `${window.innerWidth}px`;
+    this.canvas.style.height = `${window.innerHeight}px`;
+
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+
+    const aspect = this.canvas.width / this.canvas.height;
+    mat4.perspective(this.projectionMatrix, Math.PI / 4, aspect, 0.1, 1000);
   }
 
-  render() {
-    const { ctx } = this;
+  render(): void {
+    const { gl, game } = this;
+    const { world, camera } = game;
 
-    if (!ctx) return;
+    gl.clearColor(0.5, 0.8, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    ctx.save();
+    const viewMatrix = camera.getViewMatrix();
 
-    const { canvas } = this;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    world.render(gl, this.projectionMatrix, viewMatrix);
 
-    const dpi = window.devicePixelRatio;
-    ctx.scale(dpi, dpi);
-
-    ctx.save();
-
-    const { camera } = this.game;
-    ctx.translate(window.innerWidth * 0.5, window.innerHeight * 0.8);
-    ctx.scale(camera.zoom, camera.zoom);
-    ctx.rotate(-camera.rotationX);
-    ctx.translate(-camera.x, -camera.y);
-
-    this.game.world.render(ctx, canvas);
-
-    ctx.restore();
-
-    this.game.hud.render(ctx, canvas);
-
-    ctx.restore();
+    game.hud.render();
   }
 
   onResize() {
     this.resize();
-  }
-
-  destroy() {
-    window.removeEventListener("resize", this.onResize);
   }
 }

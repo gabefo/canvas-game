@@ -7,7 +7,7 @@ export abstract class Vehicle extends GameObject {
   fuel: number = 80;
 
   constructor(name: string, seats: number) {
-    super(80, 120, 40);
+    super();
 
     this.name = name;
     this.seats = Array(seats).fill(null);

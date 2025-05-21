@@ -1,24 +1,30 @@
+import { CubeGeometry } from "@core/geometry/CubeGeometry";
 import { GameObject } from "@world/GameObject";
+import { mat4 } from "gl-matrix";
 
 export class Player extends GameObject {
-  speed: number = 0.5;
+  speed: number = 0;
+  headPitch: number = 0;
 
-  constructor() {
-    super(40, 40, 40);
-  }
+  private head = new CubeGeometry(1, 1, 1).setPosition(0, 2.75, 0);
+  private body = new CubeGeometry(1, 1.5, 0.5).setPosition(0, 1.75, 0);
+  private armL = new CubeGeometry(0.4, 1.2, 0.4).setPosition(-0.7, 1.75, 0);
+  private armR = new CubeGeometry(0.4, 1.2, 0.4).setPosition(0.7, 1.75, 0);
+  private legL = new CubeGeometry(0.4, 1.2, 0.4).setPosition(-0.25, 0.6, 0);
+  private legR = new CubeGeometry(0.4, 1.2, 0.4).setPosition(0.25, 0.6, 0);
 
-  move(distance: number, angle: number) {
-    const a = angle + this.rotationX;
-    let x = this.x + Math.cos(a) * distance;
-    let y = this.y + Math.sin(a) * distance;
+  walk(distance: number, angle: number) {
+    const a = angle - this.rotationY;
+    let x = this.x - Math.cos(a) * distance;
+    let z = this.z - Math.sin(a) * distance;
 
     const { world } = this;
 
     if (world) {
-      const minX = this.width / 2;
-      const maxX = world.width - this.width / 2;
-      const minY = this.height / 2;
-      const maxY = world.height - this.height / 2;
+      const minX = 0;
+      const maxX = world.width;
+      const minZ = 0;
+      const maxZ = world.depth;
 
       if (x < minX) {
         x = minX;
@@ -26,18 +32,23 @@ export class Player extends GameObject {
         x = maxX;
       }
 
-      if (y < minY) {
-        y = minY;
-      } else if (y > maxY) {
-        y = maxY;
+      if (z < minZ) {
+        z = minZ;
+      } else if (z > maxZ) {
+        z = maxZ;
       }
     }
 
-    return this.setPosition(x, y, this.z);
+    return this.setPosition(x, this.y, z);
   }
 
-  rotate(delta: number) {
-    this.setRotation(this.rotationX + delta, this.rotationY, this.rotationZ);
+  rotateBody(angle: number) {
+    this.setRotation(this.rotationX, this.rotationY + angle, this.rotationZ);
+    return this;
+  }
+
+  setHeadPitch(pitch: number) {
+    this.headPitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch));
     return this;
   }
 
@@ -51,46 +62,28 @@ export class Player extends GameObject {
     let vx = 0;
     let vy = 0;
 
-    if (controller.isKeyDown("ArrowRight") || controller.isKeyDown("KeyD")) {
+    if (controller.isKeyDown("ArrowRight") || controller.isKeyDown("KeyD"))
       vx++;
-    }
-
-    if (controller.isKeyDown("ArrowLeft") || controller.isKeyDown("KeyA")) {
-      vx--;
-    }
-
-    if (controller.isKeyDown("ArrowDown") || controller.isKeyDown("KeyS")) {
-      vy++;
-    }
-
-    if (controller.isKeyDown("ArrowUp") || controller.isKeyDown("KeyW")) {
-      vy--;
-    }
+    if (controller.isKeyDown("ArrowLeft") || controller.isKeyDown("KeyA")) vx--;
+    if (controller.isKeyDown("ArrowDown") || controller.isKeyDown("KeyS")) vy++;
+    if (controller.isKeyDown("ArrowUp") || controller.isKeyDown("KeyW")) vy--;
 
     if (vx !== 0 || vy !== 0) {
-      const multiplier = controller.isKeyDown("ShiftLeft") ? 1.5 : 1;
-      this.move(deltaTime * this.speed * multiplier, Math.atan2(vy, vx));
+      this.speed = controller.isKeyDown("ShiftLeft") ? 0.01 : 0.005;
+      this.walk(deltaTime * this.speed, Math.atan2(vy, vx));
+    } else {
+      this.speed = 0;
     }
   }
 
-  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    const { world } = this;
+  render(gl: WebGL2RenderingContext, projection: mat4, view: mat4): void {
+    const playerModel = this.getMatrix();
 
-    if (!world) return;
-
-    const { x, y, width, height, rotationX: rotation } = this;
-
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rotation);
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.moveTo(-width / 2, height / 2);
-    ctx.lineTo(0, -height / 2);
-    ctx.lineTo(width / 2, height / 2);
-    ctx.lineTo(0, height / 4);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+    this.body.render(gl, projection, view, playerModel);
+    this.head.render(gl, projection, view, playerModel);
+    this.armL.render(gl, projection, view, playerModel);
+    this.armR.render(gl, projection, view, playerModel);
+    this.legL.render(gl, projection, view, playerModel);
+    this.legR.render(gl, projection, view, playerModel);
   }
 }

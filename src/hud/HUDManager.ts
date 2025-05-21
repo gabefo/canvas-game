@@ -21,9 +21,5 @@ export class HUDManager {
     }
   }
 
-  render(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-    for (const widget of this.widgets) {
-      widget.render(ctx, canvas);
-    }
-  }
+  render() {}
 }

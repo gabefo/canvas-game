@@ -10,23 +10,22 @@ import { Ticker } from "./Ticker";
 export class Game {
   readonly world: World;
   readonly camera: Camera;
-  readonly hud: HUDManager;
   readonly input: InputManager;
+  readonly hud: HUDManager;
   readonly renderer: Renderer;
   readonly ticker: Ticker;
 
   constructor(canvas: HTMLCanvasElement) {
     this.world = new World(this);
     this.camera = new Camera(this).setTarget(this.world.player);
-    this.hud = new HUDManager(this).add(new Minimap()).add(new HealthBar());
     this.input = new InputManager(this);
+    this.hud = new HUDManager(this).add(new Minimap()).add(new HealthBar());
     this.renderer = new Renderer(this, canvas);
     this.ticker = new Ticker(this);
   }
 
   update(deltaTime: number) {
     this.world.update(deltaTime);
-    this.camera.update(deltaTime);
     this.hud.update(deltaTime);
     this.renderer.render();
   }

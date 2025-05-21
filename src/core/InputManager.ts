@@ -31,8 +31,10 @@ export class InputManager {
 
   private onMouseMove(e: MouseEvent) {
     const sensitivity = 0.002;
-    const deltaX = e.movementX;
-    this.game.world.player.rotate(deltaX * sensitivity);
+    this.game.world.player.rotateBody(-e.movementX * sensitivity);
+    this.game.world.player.setHeadPitch(
+      this.game.world.player.headPitch - e.movementY * sensitivity
+    );
   }
 
   private onMouseDown(e: MouseEvent) {

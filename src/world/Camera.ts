@@ -1,35 +1,47 @@
 import type { Game } from "@core/Game";
-import type { GameObject } from "./GameObject";
-import { Transform } from "./Transform";
+import type { Player } from "@player/Player";
+import { mat4, vec3 } from "gl-matrix";
 
-export class Camera extends Transform {
+export class Camera {
   readonly game: Game;
 
-  zoom: number = 1;
-  target: GameObject | null = null;
+  target: Player | null = null;
+  distance: number = 5;
 
   constructor(game: Game) {
-    super();
     this.game = game;
   }
 
-  setZoom(zoom: number) {
-    this.zoom = zoom;
-    return this;
-  }
-
-  setTarget(target: GameObject | null) {
-    this.target = target;
-    this.update(0);
-    return this;
-  }
-
-  update(deltaTime: number) {
+  getViewMatrix(): mat4 {
     const { target } = this;
 
-    if (target) {
-      this.setPosition(target.x, target.y, target.z);
-      this.setRotation(target.rotationX, target.rotationY, target.rotationZ);
+    if (!target) {
+      return mat4.create();
     }
+
+    const { distance } = this;
+    const { position, rotation, headPitch } = target;
+
+    const center = vec3.fromValues(position[0], position[1] + 2, position[2]);
+
+    const offset = vec3.fromValues(
+      Math.sin(rotation[1]) * Math.cos(rotation[0]) * distance,
+      Math.sin(rotation[0] + headPitch) * distance,
+      Math.cos(rotation[1]) * Math.cos(rotation[0]) * distance
+    );
+
+    const eye = vec3.create();
+    vec3.subtract(eye, center, offset);
+
+    const up = vec3.fromValues(0, 1, 0);
+
+    const viewMatrix = mat4.create();
+    mat4.lookAt(viewMatrix, eye, center, up);
+    return viewMatrix;
+  }
+
+  setTarget(target: Player | null) {
+    this.target = target;
+    return this;
   }
 }
