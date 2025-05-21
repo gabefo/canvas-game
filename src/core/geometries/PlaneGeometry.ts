@@ -1,13 +1,18 @@
 import { Geometry } from "./Geometry";
 
 export class PlaneGeometry extends Geometry {
-  constructor(width: number, depth: number) {
-    super(width, 1, depth);
+  width: number;
+  height: number;
+
+  constructor(width: number, height: number) {
+    super();
+    this.width = width;
+    this.height = height;
   }
 
   protected getVertices(): Float32Array {
     const hw = this.width / 2;
-    const hd = this.depth / 2;
+    const hd = this.height / 2;
     return new Float32Array([
       -hw,
       0.0,

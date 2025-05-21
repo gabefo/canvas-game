@@ -1,8 +1,15 @@
 import { Geometry } from "./Geometry";
 
-export class CubeGeometry extends Geometry {
+export class BoxGeometry extends Geometry {
+  width: number;
+  height: number;
+  depth: number;
+
   constructor(width: number, height: number, depth: number) {
-    super(width, height, depth);
+    super();
+    this.width = width;
+    this.height = height;
+    this.depth = depth;
   }
 
   protected getVertices(): Float32Array {

@@ -1,4 +1,4 @@
-import { CubeGeometry } from "@core/geometry/CubeGeometry";
+import { BoxGeometry } from "@core/geometries/BoxGeometry";
 import { GameObject } from "@world/GameObject";
 import { mat4 } from "gl-matrix";
 
@@ -6,12 +6,12 @@ export class Player extends GameObject {
   speed: number = 0;
   headPitch: number = 0;
 
-  private head = new CubeGeometry(1, 1, 1).setPosition(0, 2.75, 0);
-  private body = new CubeGeometry(1, 1.5, 0.5).setPosition(0, 1.75, 0);
-  private armL = new CubeGeometry(0.4, 1.2, 0.4).setPosition(-0.7, 1.75, 0);
-  private armR = new CubeGeometry(0.4, 1.2, 0.4).setPosition(0.7, 1.75, 0);
-  private legL = new CubeGeometry(0.4, 1.2, 0.4).setPosition(-0.25, 0.6, 0);
-  private legR = new CubeGeometry(0.4, 1.2, 0.4).setPosition(0.25, 0.6, 0);
+  private head = new BoxGeometry(1, 1, 1).setPosition(0, 2.75, 0);
+  private body = new BoxGeometry(1, 1.5, 0.5).setPosition(0, 1.75, 0);
+  private armL = new BoxGeometry(0.4, 1.2, 0.4).setPosition(-0.7, 1.75, 0);
+  private armR = new BoxGeometry(0.4, 1.2, 0.4).setPosition(0.7, 1.75, 0);
+  private legL = new BoxGeometry(0.4, 1.2, 0.4).setPosition(-0.25, 0.6, 0);
+  private legR = new BoxGeometry(0.4, 1.2, 0.4).setPosition(0.25, 0.6, 0);
 
   walk(distance: number, angle: number) {
     const a = angle - this.rotationY;

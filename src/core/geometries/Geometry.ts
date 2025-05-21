@@ -2,22 +2,12 @@ import { Transform } from "@world/Transform";
 import { mat4, vec4 } from "gl-matrix";
 
 export abstract class Geometry extends Transform {
-  width: number;
-  height: number;
-  depth: number;
   color: vec4 = vec4.fromValues(1.0, 1.0, 1.0, 1.0);
 
   protected shaderProgram: WebGLProgram | null = null;
   protected vertexCount: number = 0;
   protected vao: WebGLVertexArrayObject | null = null;
   protected initialized: boolean = false;
-
-  constructor(width: number, height: number, depth: number) {
-    super();
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
-  }
 
   protected abstract getVertices(): Float32Array;
 

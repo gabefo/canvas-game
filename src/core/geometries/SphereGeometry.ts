@@ -1,6 +1,8 @@
 import { Geometry } from "./Geometry";
 
 export class SphereGeometry extends Geometry {
+  radius: number;
+
   private widthSegments: number;
   private heightSegments: number;
 
@@ -9,14 +11,15 @@ export class SphereGeometry extends Geometry {
     widthSegments: number = 32,
     heightSegments: number = 16
   ) {
-    super(radius * 2, radius * 2, radius * 2);
+    super();
+    this.radius = radius;
     this.widthSegments = Math.max(3, widthSegments);
     this.heightSegments = Math.max(2, heightSegments);
   }
 
   protected getVertices(): Float32Array {
     const verts: number[] = [];
-    const radius = this.width / 2;
+    const { radius } = this;
 
     for (let y = 0; y <= this.heightSegments; y++) {
       const v = y / this.heightSegments;

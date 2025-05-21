@@ -1,5 +1,5 @@
 import type { Game } from "@core/Game";
-import { PlaneGeometry } from "@core/geometry/PlaneGeometry";
+import { PlaneGeometry } from "@core/geometries/PlaneGeometry";
 import { Player } from "@player/Player";
 import { mat4 } from "gl-matrix";
 import type { GameObject } from "./GameObject";
