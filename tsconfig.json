@@ -24,8 +24,8 @@
     "baseUrl": "./src",
     "paths": {
       "@core/*": ["core/*"],
-      "@world/*": ["world/*"],
-      "@player/*": ["player/*"],
+      "@controls/*": ["controls/*"],
+      "@objects/*": ["objects/*"],
       "@hud/*": ["hud/*"]
     }
   },

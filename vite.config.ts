@@ -11,8 +11,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@core": path.resolve(__dirname, "./src/core"),
-      "@world": path.resolve(__dirname, "./src/world"),
-      "@player": path.resolve(__dirname, "./src/player"),
+      "@controls": path.resolve(__dirname, "./src/controls"),
+      "@objects": path.resolve(__dirname, "./src/objects"),
       "@hud": path.resolve(__dirname, "./src/hud"),
     },
   },

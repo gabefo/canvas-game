@@ -1,7 +1,7 @@
 import { Game } from "@core/Game";
 
-function createGame(canvas: HTMLCanvasElement) {
-  return new Game(canvas);
+function createGame() {
+  return new Game();
 }
 
-createGame(document.querySelector<HTMLCanvasElement>("#canvas")!);
+createGame();

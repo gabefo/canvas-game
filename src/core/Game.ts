@@ -1,40 +1,63 @@
-import { HUDManager } from "@hud/HUDManager";
-import { HealthBar } from "@hud/widgets/HealthBar";
-import { Minimap } from "@hud/widgets/Minimap";
-import { Camera } from "@world/Camera";
-import { World } from "@world/World";
-import { Renderer } from "./Renderer";
-import { Ticker } from "./Ticker";
+import * as THREE from "three";
 import { InputManager } from "./inputs/InputManager";
+import { World } from "./World";
 
 export class Game {
+  readonly clock: THREE.Clock;
+  readonly camera: THREE.PerspectiveCamera;
   readonly world: World;
-  readonly hud: HUDManager;
-  readonly camera: Camera;
-  readonly renderer: Renderer;
-  readonly ticker: Ticker;
+  readonly renderer: THREE.WebGLRenderer;
   readonly inputs: InputManager;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.world = new World(this);
-    this.hud = new HUDManager(this).add(new Minimap()).add(new HealthBar());
-    this.camera = new Camera(this).setTarget(this.world.player);
-    this.renderer = new Renderer(this, canvas);
-    this.ticker = new Ticker(this);
-    this.inputs = new InputManager(this);
+  constructor() {
+    this.clock = new THREE.Clock();
 
-    this.inputs.mouse.onMouseMove((e) => {
-      const sensitivity = 0.002;
-      this.world.player.rotateBody(-e.movementX * sensitivity);
-      this.world.player.setHeadPitch(
-        this.world.player.headPitch - e.movementY * sensitivity
-      );
+    const camera = new THREE.PerspectiveCamera(
+      70,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.rotation.order = "YXZ";
+    this.camera = camera;
+
+    this.world = new World(this);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(this.animate.bind(this));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.VSMShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    document.body.appendChild(renderer.domElement);
+    this.renderer = renderer;
+
+    const inputs = new InputManager(this);
+    inputs.mouse.onMouseDown((event) => {
+      document.body.requestPointerLock();
     });
+    inputs.mouse.onMouseMove((event) => {
+      if (document.pointerLockElement === document.body) {
+        camera.rotation.y -= event.movementX / 500;
+        camera.rotation.x -= event.movementY / 500;
+      }
+    });
+    this.inputs = inputs;
+
+    this.onWindowResize = this.onWindowResize.bind(this);
+    window.addEventListener("resize", this.onWindowResize);
   }
 
-  update(deltaTime: number) {
-    this.world.update(deltaTime);
-    this.hud.update(deltaTime);
-    this.renderer.render();
+  onWindowResize() {
+    const { camera, renderer } = this;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  animate() {
+    const delta = this.clock.getDelta();
+    this.renderer.render(this.world.scene, this.camera);
   }
 }
