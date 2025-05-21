@@ -40,7 +40,7 @@ export class Renderer {
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 
     const aspect = this.canvas.width / this.canvas.height;
-    mat4.perspective(this.projectionMatrix, Math.PI / 4, aspect, 0.1, 1000);
+    mat4.perspective(this.projectionMatrix, Math.PI / 4, aspect, 1, 100);
   }
 
   render(): void {

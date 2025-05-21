@@ -6,8 +6,8 @@ export class Camera {
   readonly game: Game;
 
   target: Player | null = null;
-  distance: number = 5;
-  height: number = 3;
+  height: number = 2;
+  distance: number = 3;
 
   constructor(game: Game) {
     this.game = game;
@@ -20,7 +20,7 @@ export class Camera {
       return mat4.create();
     }
 
-    const { distance, height } = this;
+    const { height, distance } = this;
     const { position, rotation, headPitch } = target;
 
     const center = vec3.fromValues(
