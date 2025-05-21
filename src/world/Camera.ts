@@ -7,6 +7,7 @@ export class Camera {
 
   target: Player | null = null;
   distance: number = 5;
+  height: number = 3;
 
   constructor(game: Game) {
     this.game = game;
@@ -19,10 +20,14 @@ export class Camera {
       return mat4.create();
     }
 
-    const { distance } = this;
+    const { distance, height } = this;
     const { position, rotation, headPitch } = target;
 
-    const center = vec3.fromValues(position[0], position[1] + 2, position[2]);
+    const center = vec3.fromValues(
+      position[0],
+      position[1] + height,
+      position[2]
+    );
 
     const offset = vec3.fromValues(
       Math.sin(rotation[1]) * Math.cos(rotation[0]) * distance,
